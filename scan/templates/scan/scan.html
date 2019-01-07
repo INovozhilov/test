@@ -1,0 +1,56 @@
+{% load static %}
+<html>
+  <head>
+    <title>Scanner</title>
+    <script type="text/javascript" src="{% static 'scan/instascan.min.js' %}"></script>
+  </head>
+  <body>
+    <video id="preview"></video>
+{% if subscription_list %}
+    <ul>
+    {% for subscription in subscription_list %}
+        <li>{{ subscription.owner }} - {{ subscription.count_left }} ({{ subscription.pk }})</li>
+        {#<li><a href="{% url 'polls:detail' question.id %}">{{ subscription.owner }}</a></li>#}
+    {% endfor %}
+    </ul>
+{% else %}
+    <ul>
+    {{ subscription }}
+    {% for visit in subscription.visit_set.all %}
+        <li>{{ visit }} </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if visit_list %}
+    <ul>
+    {% for visit in visit_list %}
+        <li>{{ visit }} </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No subscriptions are available.</p>
+{% endif %}
+
+
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview'),  mirror: false, backgroundScan: false });
+      scanner.addListener('scan', function (content) {
+        console.log(content);
+        var sqcode = content.split("/").pop();
+        window.location.replace("{% url 'scan:mark' 9999999999 %}".replace("9999999999", id));
+        {# window.location.replace("/scan/" + sqcode + "/mark"); #}
+
+
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[cameras.length - 1]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+  </body>
+</html>

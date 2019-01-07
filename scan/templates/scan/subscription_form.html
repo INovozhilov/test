@@ -1,0 +1,20 @@
+{% load bootstrap4 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {# <table> #}
+    {# {{ form.as_table }} #}
+    {# </table> #}
+    <input type="submit" value="Submit" />
+
+</form>
+
+<ul>
+{% for visit in subscription.visit_set.all %}
+    <li>{{ visit.date }}</li>
+{% endfor %}
+</ul>

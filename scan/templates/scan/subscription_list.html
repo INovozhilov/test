@@ -1,0 +1,14 @@
+{% load static %}
+
+{% if subscription_list %}
+    <ul>
+    {% for subscription in subscription_list %}
+        <li><a href="{% url 'scan:subscription_update' subscription.pk %}">{{ subscription.owner }} - {{ subscription.count_left }} ({{ subscription.pk }})</a></li>
+        {#<li><a href="{% url 'polls:detail' question.id %}">{{ subscription.owner }}</a></li>#}
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No subscriptions are available.</p>
+{% endif %}
+    <a href="{% url 'scan:subscription_create' %}">New subscription</a>
+    <a href="{% url 'scan:scan' %}">Scanner</a>
