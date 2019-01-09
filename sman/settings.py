@@ -25,12 +25,13 @@ SECRET_KEY = ')t22d_z(5k)vjiuqiqk$=i#$cqm$0s&yfdz@y0yb@*ddlrz0og'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.42','46.147.36.46', '127.0.0.1', 'www.example.com']
+ALLOWED_HOSTS = ['192.168.1.42','37.112.8.17', '127.0.0.1', 'www.example.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap_datepicker_plus',
     'bootstrap4',
     'scan.apps.ScanConfig',
     'polls.apps.PollsConfig',

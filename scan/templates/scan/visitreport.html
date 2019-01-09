@@ -1,0 +1,25 @@
+{% load static %}
+<head>
+{% load bootstrap4 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{{ form.media }}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <form action="" method="get">
+            {% bootstrap_form form %}
+            <input type="submit" value="Submit" />
+        </form>
+        {{ date_param }}
+        <ul>
+        {% for subscription in subscription_list %}
+            <li>{{ subscription.owner }} - {{ subscription.count_left }}</li>
+        {% endfor %}
+        </ul>
+        Итого: {{ subscription_list.count }}
+    </div>
+</body>

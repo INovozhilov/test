@@ -3,6 +3,7 @@
   <head>
     <title>Scanner</title>
     <script type="text/javascript" src="{% static 'scan/instascan.min.js' %}"></script>
+
   </head>
   <body>
     <video id="preview"></video>
@@ -37,7 +38,7 @@
       scanner.addListener('scan', function (content) {
         console.log(content);
         var sqcode = content.split("/").pop();
-        window.location.replace("{% url 'scan:mark' 9999999999 %}".replace("9999999999", id));
+        window.location.replace("{% url 'scan:mark' 9999999999 %}".replace("9999999999", sqcode));
         {# window.location.replace("/scan/" + sqcode + "/mark"); #}
 
 

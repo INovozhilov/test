@@ -5,7 +5,13 @@ from django.urls import reverse_lazy
 # Create your models here.
 class Subscription(models.Model):
     owner = models.CharField(max_length=200)
-    count_left = models.IntegerField()
+    qrcode = models.SlugField(max_length=200,
+                              unique=True,
+                              null=True,
+                              blank=True,
+                              )
+
+    count_left = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return self.owner

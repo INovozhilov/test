@@ -7,7 +7,7 @@ from django.db import transaction
 from datetime import datetime
 
 from .models import Subscription, Visit
-
+from .form import VisitReportForm
 
 class Index(generic.ListView):
     # template_name = 'polls/index.html'
@@ -29,8 +29,8 @@ class Detail(generic.DetailView):
 
 
 @transaction.atomic
-def mark(request, pk):
-    subscription = get_object_or_404(Subscription, pk=pk)
+def mark(request, qrcode):
+    subscription = get_object_or_404(Subscription, qrcode=qrcode)
 
     subscription.visit_set.create(date=datetime.now())
     subscription.count_left -= 1
@@ -39,7 +39,7 @@ def mark(request, pk):
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data. This prevents data from being posted twice if a
     # user hits the Back button.
-    return HttpResponseRedirect(reverse('scan:scan', args=(pk,)))
+    return HttpResponseRedirect(reverse('scan:scan', args=(qrcode,)))
 
 
 class SubscriptionCreate(CreateView):
@@ -58,7 +58,6 @@ class SubscriptionDelete(DeleteView):
 
 
 def scan(request, pk=None):
-
     if pk is not None:
         subscription = Subscription.objects.get(pk=pk)
         # visits = Visit.objects.all()
@@ -68,3 +67,14 @@ def scan(request, pk=None):
         context = {'subscription_list': subscriptions, }
 
     return render(request, 'scan/scan.html', context=context)
+
+
+def visitreport(request):
+    form = VisitReportForm(request.GET)
+    context = {'form': form}
+    date = request.GET['date']
+    if date is not None:
+        context['subscription_list'] = Subscription.objects.filter(visit__date=date)
+    context['date_param'] = date
+
+    return render(request, 'scan/visitreport.html' , context=context)

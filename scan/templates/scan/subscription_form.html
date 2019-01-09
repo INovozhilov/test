@@ -1,20 +1,54 @@
+{% load static %}
 {% load bootstrap4 %}
+<head>
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="{% static 'scan/instascan.min.js' %}"></script>
+</head>
 
-<form action="" method="post">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {# <table> #}
-    {# {{ form.as_table }} #}
-    {# </table> #}
-    <input type="submit" value="Submit" />
+<body>
+    <div class="container-fluid">
+        <form action="" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {# <table> #}
+            {# {{ form.as_table }} #}
+            {# </table> #}
+            <input type="submit" value="Submit" />
 
-</form>
+        </form>
 
-<ul>
-{% for visit in subscription.visit_set.all %}
-    <li>{{ visit.date }}</li>
-{% endfor %}
-</ul>
+        <ul>
+        {% for visit in subscription.visit_set.all %}
+            <li>{{ visit.date }}</li>
+        {% endfor %}
+        </ul>
+
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseblock" role="button" aria-expanded="false" aria-controls="collapseExample">
+        Scanner
+        </a>
+        <div class="collapse" id="collapseblock">
+            <video id="preview"></video>
+        </div>
+        <script type="text/javascript">
+          let scanner = new Instascan.Scanner({ video: document.getElementById('preview'),  mirror: false, backgroundScan: false });
+          scanner.addListener('scan', function (content) {
+            console.log(content);
+            var sqcode = content.split("/").pop();
+            document.getElementById("id_qrcode").value = sqcode;
+
+          });
+          Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+              scanner.start(cameras[cameras.length - 1]);
+            } else {
+              console.error('No cameras found.');
+            }
+          }).catch(function (e) {
+            console.error(e);
+          });
+        </script>
+    </div>
+</body>
