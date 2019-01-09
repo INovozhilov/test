@@ -72,7 +72,7 @@ def scan(request, pk=None):
 def visitreport(request):
     form = VisitReportForm(request.GET)
     context = {'form': form}
-    date = request.GET['date']
+    date = request.GET.get('date', None)
     if date is not None:
         context['subscription_list'] = Subscription.objects.filter(visit__date=date)
     context['date_param'] = date
